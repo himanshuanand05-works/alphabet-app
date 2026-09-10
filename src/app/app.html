@@ -8,7 +8,7 @@
 
   <header class="header">
     <h1 class="title">Alphabet Explorer</h1>
-    <p class="subtitle">Press any letter key on your keyboard</p>
+    <p class="subtitle">Press a key or tap a letter below</p>
   </header>
 
   <main class="display-area">
@@ -40,20 +40,32 @@
     }
   </main>
 
+  <nav class="alphabet-grid" aria-label="Alphabet letters">
+    @for (letter of alphabet; track letter) {
+      <button
+        class="alpha-key"
+        [class.active]="currentLetter() === letter"
+        [style.--key-bg]="getColorForLetter(letter).bg"
+        [style.--key-shadow]="getColorForLetter(letter).shadow"
+        (click)="activateLetter(letter)"
+      >{{ letter }}</button>
+    }
+  </nav>
+
   <footer class="keyboard-hint">
     <div class="key-row">
       @for (letter of ['Q','W','E','R','T','Y','U','I','O','P']; track letter) {
-        <span class="key" [class.active]="currentLetter() === letter">{{ letter }}</span>
+        <button class="key" [class.active]="currentLetter() === letter" (click)="activateLetter(letter)">{{ letter }}</button>
       }
     </div>
     <div class="key-row">
       @for (letter of ['A','S','D','F','G','H','J','K','L']; track letter) {
-        <span class="key" [class.active]="currentLetter() === letter">{{ letter }}</span>
+        <button class="key" [class.active]="currentLetter() === letter" (click)="activateLetter(letter)">{{ letter }}</button>
       }
     </div>
     <div class="key-row">
       @for (letter of ['Z','X','C','V','B','N','M']; track letter) {
-        <span class="key" [class.active]="currentLetter() === letter">{{ letter }}</span>
+        <button class="key" [class.active]="currentLetter() === letter" (click)="activateLetter(letter)">{{ letter }}</button>
       }
     </div>
   </footer>

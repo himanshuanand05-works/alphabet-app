@@ -89,27 +89,38 @@ export class App {
     synth.onvoiceschanged = () => pick();
   }
 
+  readonly alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
   @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
     const key = event.key.toUpperCase();
     if (/^[A-Z]$/.test(key)) {
-      this.ngZone.run(() => {
-        this.showLetter.set(false);
-        setTimeout(() => {
-          this.currentLetter.set(key);
-          this.showLetter.set(true);
-          this.ringVisible.set(true);
-          this.speakLetter(key);
-          this.playTone(key);
-          setTimeout(() => this.ringVisible.set(false), 800);
-        }, 50);
-      });
+      this.activateLetter(key);
     }
+  }
+
+  activateLetter(letter: string) {
+    this.ngZone.run(() => {
+      this.showLetter.set(false);
+      setTimeout(() => {
+        this.currentLetter.set(letter);
+        this.showLetter.set(true);
+        this.ringVisible.set(true);
+        this.speakLetter(letter);
+        this.playTone(letter);
+        setTimeout(() => this.ringVisible.set(false), 800);
+      }, 50);
+    });
   }
 
   getColor() {
     const letter = this.currentLetter();
     if (!letter) return this.colors[0];
+    const idx = (letter.charCodeAt(0) - 65) % this.colors.length;
+    return this.colors[idx];
+  }
+
+  getColorForLetter(letter: string) {
     const idx = (letter.charCodeAt(0) - 65) % this.colors.length;
     return this.colors[idx];
   }

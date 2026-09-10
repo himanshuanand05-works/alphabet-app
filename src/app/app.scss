@@ -222,10 +222,55 @@ $bg-card: #1a1a2e;
   margin: 0;
 }
 
+// --- Alphabet grid ---
+.alphabet-grid {
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  max-width: 520px;
+}
+
+.alpha-key {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: var(--key-bg, #ff6b6b);
+    color: #fff;
+    border-color: var(--key-shadow, #ff4757);
+    transform: scale(1.08);
+  }
+
+  &:active {
+    transform: scale(0.92);
+  }
+
+  &.active {
+    background: var(--key-bg, #ff6b6b);
+    color: #fff;
+    border-color: var(--key-shadow, #ff4757);
+    box-shadow: 0 0 16px color-mix(in srgb, var(--key-shadow) 60%, transparent);
+    transform: scale(1.12);
+  }
+}
+
 // --- Keyboard hint ---
 .keyboard-hint {
   z-index: 1;
-  padding: 1.5rem 1rem 2rem;
+  padding: 1rem 1rem 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -249,8 +294,11 @@ $bg-card: #1a1a2e;
   color: rgba(255, 255, 255, 0.4);
   font-size: 0.8rem;
   font-weight: 600;
+  font-family: inherit;
   transition: all 0.2s ease;
   user-select: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 
   &.active {
     background: var(--accent, #ff6b6b);
@@ -268,5 +316,19 @@ $bg-card: #1a1a2e;
   .letter-card { width: 180px; height: 180px; border-radius: 30px; }
   .letter { font-size: 7rem; }
   .glow-ring { width: 220px; height: 220px; }
-  .key { width: 28px; height: 28px; font-size: 0.7rem; }
+  .key { width: 30px; height: 30px; font-size: 0.7rem; }
+
+  .alphabet-grid {
+    gap: 0.35rem;
+    padding: 0.5rem 0.75rem;
+    max-width: 420px;
+  }
+  .alpha-key {
+    border-radius: 8px;
+    font-size: 0.9rem;
+  }
+
+  .app-container {
+    overflow-y: auto;
+  }
 }
