@@ -7,7 +7,22 @@
   </div>
 
   <header class="header">
-    <h1 class="title">Alphabet Explorer</h1>
+    <div class="header-actions">
+      <h1 class="title">Alphabet Explorer</h1>
+      <button
+        class="animal-toggle"
+        [class.on]="showAnimalImage()"
+        [style.--accent]="getColor().bg"
+        [style.--accent-shadow]="getColor().shadow"
+        (click)="toggleAnimalImages()"
+        [attr.aria-pressed]="showAnimalImage()"
+        [attr.aria-label]="showAnimalImage() ? 'Hide animal images' : 'Show animal images'"
+      >
+        <span class="toggle-icon" role="img" aria-hidden="true">🐾</span>
+        <span class="toggle-label">Images</span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </button>
+    </div>
     <p class="subtitle">Press a key or tap a letter below</p>
   </header>
 
@@ -21,6 +36,19 @@
       </div>
 
       <div class="info-section" @letterAnim>
+        @if (showAnimalImage() && currentAnimal()) {
+          <div class="animal-card" [style.--accent]="getColor().bg" [style.--accent-shadow]="getColor().shadow">
+            <img
+              class="animal-img"
+              [src]="currentAnimal()!.image"
+              [alt]="currentAnimal()!.name"
+              loading="lazy"
+              (error)="onAnimalImageError($event)"
+            />
+            <span class="animal-name">{{ currentAnimal()!.name }}</span>
+          </div>
+        }
+
         <div class="words-row">
           @for (word of getWords(); track word) {
             <span class="word-chip" [style.--accent]="getColor().bg" [style.--accent-shadow]="getColor().shadow">{{ word }}</span>

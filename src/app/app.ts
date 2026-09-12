@@ -38,6 +38,27 @@ export class App {
   showLetter = signal(false);
   colorIndex = 0;
   ringVisible = signal(false);
+  showAnimalImage = signal(this.loadAnimalImagePref());
+
+  private static readonly ANIMAL_IMAGE_KEY = 'alphabetApp.showAnimalImage';
+
+  private loadAnimalImagePref(): boolean {
+    try {
+      return localStorage.getItem(App.ANIMAL_IMAGE_KEY) === 'true';
+    } catch {
+      return false;
+    }
+  }
+
+  toggleAnimalImages() {
+    const next = !this.showAnimalImage();
+    this.showAnimalImage.set(next);
+    try {
+      localStorage.setItem(App.ANIMAL_IMAGE_KEY, String(next));
+    } catch {
+      // ignore storage failures
+    }
+  }
 
   private readonly colors = [
     { bg: '#FF6B6B', text: '#FFFFFF', shadow: '#FF4757' },
@@ -155,6 +176,42 @@ export class App {
       Z: ['Zebra', 'Zoo', 'Zipper'],
     };
     return wordMap[this.currentLetter()] || [];
+  }
+
+  readonly animals: Record<string, { name: string; image: string }> = {
+    A: { name: 'Ant', image: 'animals/a.jpg' },
+    B: { name: 'Bear', image: 'animals/b.jpg' },
+    C: { name: 'Cat', image: 'animals/c.jpg' },
+    D: { name: 'Dog', image: 'animals/d.jpg' },
+    E: { name: 'Elephant', image: 'animals/e.jpg' },
+    F: { name: 'Fox', image: 'animals/f.jpg' },
+    G: { name: 'Goat', image: 'animals/g.jpg' },
+    H: { name: 'Horse', image: 'animals/h.jpg' },
+    I: { name: 'Iguana', image: 'animals/i.jpg' },
+    J: { name: 'Jaguar', image: 'animals/j.jpg' },
+    K: { name: 'Koala', image: 'animals/k.jpg' },
+    L: { name: 'Lion', image: 'animals/l.jpg' },
+    M: { name: 'Monkey', image: 'animals/m.jpg' },    N: { name: 'Nilgai', image: 'animals/n.jpg' },
+    O: { name: 'Owl', image: 'animals/o.jpg' },
+    P: { name: 'Panda', image: 'animals/p.jpg' },
+    Q: { name: 'Quail', image: 'animals/q.jpg' },
+    R: { name: 'Rabbit', image: 'animals/r.jpg' },
+    S: { name: 'Snake', image: 'animals/s.jpg' },
+    T: { name: 'Tortoise', image: 'animals/t.jpg' },
+    U: { name: 'Urial', image: 'animals/u.jpg' },
+    V: { name: 'Vulture', image: 'animals/v.jpg' },
+    W: { name: 'Whale', image: 'animals/w.jpg' },
+    X: { name: 'Xerus', image: 'animals/x.jpg' },
+    Y: { name: 'Yak', image: 'animals/y.jpg' },
+    Z: { name: 'Zebra', image: 'animals/z.jpg' },
+  };
+
+  currentAnimal() {
+    return this.animals[this.currentLetter()] || null;
+  }
+
+  onAnimalImageError(event: Event) {
+    (event.target as HTMLImageElement).style.display = 'none';
   }
 
   private speakLetter(letter: string) {
