@@ -134,6 +134,25 @@ export class App {
     });
   }
 
+  private keyClickGuard = -1;
+
+  onAlphaKeyPointerDown(letter: string, event: PointerEvent) {
+    if (event.pointerType === 'mouse') {
+      return;
+    }
+    event.preventDefault();
+    this.keyClickGuard = Date.now();
+    this.activateLetter(letter);
+  }
+
+  onAlphaKeyClick(letter: string) {
+    if (Date.now() - this.keyClickGuard < 1000) {
+      this.keyClickGuard = -1;
+      return;
+    }
+    this.activateLetter(letter);
+  }
+
   getColor() {
     const letter = this.currentLetter();
     if (!letter) return this.colors[0];

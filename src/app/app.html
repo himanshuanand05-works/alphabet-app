@@ -28,33 +28,41 @@
 
   <main class="display-area">
     @if (showLetter()) {
-      <div class="letter-wrapper" @letterAnim>
-        <div class="glow-ring" [style.--accent]="getColor().bg" [style.--accent-shadow]="getColor().shadow" @ringPulse></div>
-        <div class="letter-card" [style.--accent]="getColor().bg" [style.--accent-shadow]="getColor().shadow">
-          <span class="letter" [style.color]="getColor().text">{{ currentLetter() }}</span>
+      @if (showAnimalImage() && currentAnimal()) {
+        <div class="animal-display" @letterAnim>
+          <div class="glow-ring" [style.--accent]="getColor().bg" [style.--accent-shadow]="getColor().shadow" @ringPulse></div>
+          <img
+            class="animal-img-big"
+            [src]="currentAnimal()!.image"
+            [alt]="currentAnimal()!.name"
+            loading="lazy"
+            (error)="onAnimalImageError($event)"
+          />
         </div>
-      </div>
-
-      <div class="info-section" @letterAnim>
-        @if (showAnimalImage() && currentAnimal()) {
-          <div class="animal-card" [style.--accent]="getColor().bg" [style.--accent-shadow]="getColor().shadow">
-            <img
-              class="animal-img"
-              [src]="currentAnimal()!.image"
-              [alt]="currentAnimal()!.name"
-              loading="lazy"
-              (error)="onAnimalImageError($event)"
-            />
-            <span class="animal-name">{{ currentAnimal()!.name }}</span>
+        <div class="info-section" @letterAnim>
+          <span class="animal-name">{{ currentAnimal()!.name }}</span>
+          <div class="words-row">
+            @for (word of getWords(); track word) {
+              <span class="word-chip" [style.--accent]="getColor().bg" [style.--accent-shadow]="getColor().shadow">{{ word }}</span>
+            }
           </div>
-        }
-
-        <div class="words-row">
-          @for (word of getWords(); track word) {
-            <span class="word-chip" [style.--accent]="getColor().bg" [style.--accent-shadow]="getColor().shadow">{{ word }}</span>
-          }
         </div>
-      </div>
+      } @else {
+        <div class="letter-wrapper" @letterAnim>
+          <div class="glow-ring" [style.--accent]="getColor().bg" [style.--accent-shadow]="getColor().shadow" @ringPulse></div>
+          <div class="letter-card" [style.--accent]="getColor().bg" [style.--accent-shadow]="getColor().shadow">
+            <span class="letter" [style.color]="getColor().text">{{ currentLetter() }}</span>
+          </div>
+        </div>
+
+        <div class="info-section" @letterAnim>
+          <div class="words-row">
+            @for (word of getWords(); track word) {
+              <span class="word-chip" [style.--accent]="getColor().bg" [style.--accent-shadow]="getColor().shadow">{{ word }}</span>
+            }
+          </div>
+        </div>
+      }
     } @else {
       <div class="idle-state">
         <div class="idle-circle">
@@ -75,7 +83,8 @@
         [class.active]="currentLetter() === letter"
         [style.--key-bg]="getColorForLetter(letter).bg"
         [style.--key-shadow]="getColorForLetter(letter).shadow"
-        (click)="activateLetter(letter)"
+        (pointerdown)="onAlphaKeyPointerDown(letter, $event)"
+        (click)="onAlphaKeyClick(letter)"
       >{{ letter }}</button>
     }
   </nav>
